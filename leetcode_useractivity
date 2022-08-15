@@ -1,0 +1,30 @@
+The problem is as the following - User Activity for the Past 30 Days I
+Table: Activity
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| user_id       | int     |
+| session_id    | int     |
+| activity_date | date    |
+| activity_type | enum    |
++---------------+---------+
+There is no primary key for this table, it may have duplicate rows.
+The activity_type column is an ENUM of type ('open_session', 'end_session', 'scroll_down', 'send_message').
+The table shows the user activities for a social media website. 
+Note that each session belongs to exactly one user.
+ 
+
+Write an SQL query to find the daily active user count for a period of 30 days ending 2019-07-27 inclusively. A user was active on someday if they made at least one activity on that day.
+
+Return the result table in any order.
+
+
+Solution (sql server)- 
+select x.day, count(x.active_users) active_users
+from 
+(select activity_date day, user_id active_users
+  from activity
+ where activity_date between dateadd(dd, -30, '2019-07-28') and '2019-07-28'
+ group by activity_date, user_id) x
+group by x.day
